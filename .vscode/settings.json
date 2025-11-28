@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./download_huggingface_",
+        "./download_huggingface_"
+    ]
+}

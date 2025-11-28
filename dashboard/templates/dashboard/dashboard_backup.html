@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThreatShield AI - Cybersecurity Dashboard</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/styles.css' %}">
+</head>
+<body>
+    <!-- Mobile Menu Overlay -->
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="dashboard-container">
+        <!-- ===== PROMPT 2: HEADER ===== -->
+        <header class="header">
+            <div class="header-left">
+                <!-- Mobile Hamburger Menu -->
+                <div class="hamburger-menu" id="hamburgerMenu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>ThreatShield AI</span>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search threats..." aria-label="Search threats">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="notification-bell" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="user-avatar" aria-label="User profile">
+                    <img src="https://picsum.photos/seed/user123/40/40.jpg" alt="User Avatar">
+                    <span class="online-indicator"></span>
+                </div>
+                <div class="dropdown-menu" aria-label="Menu">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== PROMPT 3: SIDEBAR ===== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-large">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>ThreatShield AI</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item active">
+                        <a href="#" class="nav-link" aria-label="Dashboard">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" aria-label="Threat Analysis">
+                            <i class="fas fa-search"></i>
+                            <span>Threat Analysis</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" aria-label="Analytics & Reports">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Analytics & Reports</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" aria-label="Attack History">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Attack History</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" aria-label="Settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" aria-label="Knowledge Base">
+                            <i class="fas fa-book"></i>
+                            <span>Knowledge Base</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" aria-label="User Management">
+                            <i class="fas fa-users"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" aria-label="Alerts">
+                            <i class="fas fa-bell"></i>
+                            <span>Alerts</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://picsum.photos/seed/user123/40/40.jpg" alt="User">
+                    <div class="user-info">
+                        <div class="user-name">Admin User</div>
+                        <div class="user-role">Security Analyst</div>
+                    </div>
+                </div>
+                <button class="logout-btn" aria-label="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- ===== MAIN CONTENT AREA ===== -->
+        <main class="main-content">
+            <!-- ===== PROMPT 9: STATISTICS CARDS ===== -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="stat-value">1,247</div>
+                        <div class="stat-label">Total Scans</div>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +12% from last week
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Threats Blocked</div>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-down"></i>
+                            -5% from last week
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-value">1,158</div>
+                        <div class="stat-label">Safe Content</div>
+                        <div class="stat-trend positive">
+                            92.9% safety rate
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="stat-value">1.2s</div>
+                        <div class="stat-label">Avg Response Time</div>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-bolt"></i>
+                            -0.3s faster
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PROMPT 4: MAIN INPUT SECTION ===== -->
+            <section class="analysis-section">
+                <div class="analysis-card">
+                    <h2 class="analysis-title">Analyze Potential Threat</h2>
+                    <p class="analysis-subtitle">Enter text, URL, or code snippet for AI-powered analysis</p>
+                    <div class="input-container">
+                        <textarea 
+                            id="threatInput" 
+                            class="threat-textarea" 
+                            placeholder="Paste suspicious content here..."
+                            maxlength="5000"
+                            aria-label="Threat input text"
+                        ></textarea>
+                        <div class="char-counter">
+                            <span id="charCount">0</span>/5000
+                        </div>
+                    </div>
+                    <button id="analyzeBtn" class="analyze-btn" aria-label="Analyze threat">
+                        <i class="fas fa-shield-alt"></i>
+                        Analyze Threat
+                    </button>
+                </div>
+            </section>
+
+            <!-- ===== PROMPT 5: PREDICTION RESULTS ===== -->
+            <section id="resultsSection" class="results-section" style="display: none;">
+                <div class="results-card">
+                    <div class="results-header">
+                        <h3>Analysis Results</h3>
+                        <span class="timestamp" id="resultTimestamp"></span>
+                    </div>
+                    <div class="result-badge" id="resultBadge">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                    <div class="confidence-score">
+                        <div class="circular-progress">
+                            <svg width="120" height="120">
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#2a3150" stroke-width="8"/>
+                                <circle id="progressCircle" cx="60" cy="60" r="54" fill="none" stroke="#00d9ff" stroke-width="8" 
+                                        stroke-dasharray="339.292" stroke-dashoffset="339.292" 
+                                        transform="rotate(-90 60 60)"/>
+                            </svg>
+                            <div class="progress-text">
+                                <span id="confidencePercent">0</span>%
+                            </div>
+                        </div>
+                    </div>
+                    <div id="threatDetails" class="threat-details">
+                        <!-- Dynamic threat details will be inserted here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PROMPT 6: GEMINI AI EXPLANATION ===== -->
+            <section id="explanationSection" class="explanation-section" style="display: none;">
+                <div class="explanation-card">
+                    <div class="explanation-header">
+                        <div class="ai-icon">
+                            <i class="fas fa-sparkles"></i>
+                        </div>
+                        <h3>Gemini AI Explanation</h3>
+                        <span class="ai-badge">Powered by AI</span>
+                    </div>
+                    <div class="explanation-content" id="explanationContent">
+                        <div class="loading-text">AI is analyzing...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PROMPT 7: CHARTS GRID ===== -->
+            <section class="charts-section">
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Threat Distribution</h3>
+                            <i class="fas fa-sync-alt refresh-icon" aria-label="Refresh data"></i>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="threatChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Attack Categories</h3>
+                            <i class="fas fa-filter filter-icon" aria-label="Filter data"></i>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="attackChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Analysis Timeline</h3>
+                            <select class="time-range-selector" aria-label="Time range">
+                                <option value="7">Last 7 days</option>
+                                <option value="30">Last 30 days</option>
+                                <option value="90">Last 90 days</option>
+                            </select>
+                            <i class="fas fa-calendar-alt calendar-icon" aria-label="Calendar view"></i>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="timelineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PROMPT 8: ATTACK TYPES SECTION ===== -->
+            <section class="attack-section">
+                <div class="attack-grid">
+                    <div class="attack-list-card">
+                        <div class="attack-list-header">
+                            <h3>Detected Attack Types</h3>
+                            <div class="search-filter">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Filter attacks..." aria-label="Filter attacks">
+                            </div>
+                        </div>
+                        <div class="attack-list">
+                            <div class="attack-item" data-attack="sql-injection" tabindex="0" role="button" aria-label="SQL Injection details">
+                                <div class="attack-icon">💉</div>
+                                <div class="attack-info">
+                                    <div class="attack-name">SQL Injection</div>
+                                    <div class="attack-count">24</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="attack-item" data-attack="xss" tabindex="0" role="button" aria-label="XSS Attack details">
+                                <div class="attack-icon">🔓</div>
+                                <div class="attack-info">
+                                    <div class="attack-name">XSS Attack</div>
+                                    <div class="attack-count">18</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="attack-item" data-attack="malware" tabindex="0" role="button" aria-label="Malware details">
+                                <div class="attack-icon">🦠</div>
+                                <div class="attack-info">
+                                    <div class="attack-name">Malware</div>
+                                    <div class="attack-count">31</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="attack-item" data-attack="phishing" tabindex="0" role="button" aria-label="Phishing details">
+                                <div class="attack-icon">🎣</div>
+                                <div class="attack-info">
+                                    <div class="attack-name">Phishing</div>
+                                    <div class="attack-count">12</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="attack-item" data-attack="ddos" tabindex="0" role="button" aria-label="DDoS details">
+                                <div class="attack-icon">💥</div>
+                                <div class="attack-info">
+                                    <div class="attack-name">DDoS</div>
+                                    <div class="attack-count">8</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="attack-item" data-attack="brute-force" tabindex="0" role="button" aria-label="Brute Force details">
+                                <div class="attack-icon">🔐</div>
+                                <div class="attack-info">
+                                    <div class="attack-name">Brute Force</div>
+                                    <div class="attack-count">15</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="attack-item" data-attack="mitm" tabindex="0" role="button" aria-label="MITM Attack details">
+                                <div class="attack-icon">📡</div>
+                                <div class="attack-info">
+                                    <div class="attack-name">MITM Attack</div>
+                                    <div class="attack-count">6</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="attack-item" data-attack="backdoor" tabindex="0" role="button" aria-label="Backdoor details">
+                                <div class="attack-icon">🚪</div>
+                                <div class="attack-info">
+                                    <div class="attack-name">Backdoor</div>
+                                    <div class="attack-count">4</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="attack-details-card">
+                        <div class="attack-details-header">
+                            <h3 id="selectedAttackName">Select an attack type to view details</h3>
+                            <span id="severityBadge" class="severity-badge" style="display: none;"></span>
+                        </div>
+                        <div class="attack-details-content" id="attackDetailsContent">
+                            <div class="default-message">
+                                <i class="fas fa-hand-pointer"></i>
+                                <p>Select an attack type from the list to view detailed information</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PROMPT 10: LIVE THREAT FEED ===== -->
+            <section class="threat-feed-section">
+                <div class="threat-feed-card">
+                    <div class="threat-feed-header">
+                        <h3>Live Threat Feed</h3>
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            <span>LIVE</span>
+                        </div>
+                        <i class="fas fa-sync-alt refresh-icon" aria-label="Refresh feed"></i>
+                    </div>
+                    <div class="threat-feed-list" id="threatFeedList">
+                        <!-- Dynamic threat feed items will be inserted here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="sr-only">Skip to main content</a>
+    
+    <!-- Matrix Rain Easter Egg Container -->
+    <div class="matrix-rain" id="matrixRain"></div>
+
+    <!-- Custom JavaScript -->
+    <script src="{% static 'dashboard/js/script.js' %}"></script>
+</body>
+</html>

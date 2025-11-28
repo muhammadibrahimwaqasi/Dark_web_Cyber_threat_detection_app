@@ -1,0 +1,102 @@
+Comprehensive Project Analysis: Darkweb Threat
+
+1) Overview
+- Purpose: A Django-based platform for text classification of cybersecurity-related content with optional AI-assisted analysis, exposing a REST API and a lightweight dashboard.
+- Core ML stack: TF-IDF + RandomForest, with model persistence via joblib, trained on cleaned datasets.
+
+2) Repository Map
+- Top level: manage.py, darkweb_app/, api/, dashboard/, data/, models/, scripts/, utils/, static/, templates, .env, db.sqlite3
+- ML artifacts: models/cyber_model.pkl, models/vectorizer.pkl
+- Data: data/agora_clean.csv, data/clydeiii_final_clean.csv, data/global_threats_clean.csv, data/mrmoor_clean.csv
+- Apps:
+  - darkweb_app: Django project config
+  - api: REST API endpoints and logging model
+  - dashboard: Lightweight UI
+- Helpers: utils/llm_helper.py
+- Scripting: scripts/*.py for data cleaning and preprocessing
+- Training: train_model.py
+
+3) Tech Stack
+- Language: Python 3.11+ (per code comments and Django 5.x)
+- Frameworks: Django, Django REST Framework
+- ML: scikit-learn (TF-IDF, RandomForest), joblib
+- Optional AI: Google Gemini (google-generativeai)
+- DB: SQLite (dev)
+- Static/UI: Django templates, static assets under static/
+
+4) Data & ML Pipeline
+- Data ingestion: combines four cleaned CSVs from data/
+- Text column detection: heuristics for column name containing text/desc/summary, fallback to single-column
+- Labeling: keyword-based heuristic with list of cybersecurity keywords
+- Vectorization: TF-IDF with max_features=8000, ngram_range=(1,3), english stopwords
+- Model: RandomForestClassifier with 300 trees, balanced_subsample, multi-threading
+- Training flow: train-test split 80/20, evaluate with classification_report
+- Persistence: saves model and vectorizer to models/
+
+5) API Design
+- Endpoints (api/urls.py):
+  - GET /status/ -> model and Gemini status
+  - POST /predict/ -> local prediction
+  - POST /analyze/ -> Gemini analysis (if configured)
+  - GET /stats/ -> aggregated stats
+  - GET / -> api root
+- Data model: api/models.PredictionLog captures input, prediction label, and optional LLM analysis; created_at
+- Health & analysis: The API loads models on startup; uses dotenv to read GEMINI_API_KEY; Gemini integration via google.generativeai
+- Example behaviors: /predict/ returns {"input": "...", "prediction": "threat"}; /stats/ returns total_predictions and per-class counts
+
+6) Dashboard Design
+- Minimal; route /dashboard/ renders dashboard.html
+- View wired through dashboard/urls.py
+
+7) Data & ML Artifacts
+- Data: four cleaned CSVs in data/
+- ML artifacts: cyber_model.pkl, vectorizer.pkl in models/
+- Training script: train_model.py builds datasets, labels, vectorizes, trains, and saves artifacts
+- Scripts: clean_*.py for generating cleaned datasets
+
+8) Environment & Security
+- DEBUG = True; SQLite by default
+- SECRET_KEY hard-coded in settings (development)
+- .env used for Gemini and other keys (not committed)
+- db.sqlite3 included in repo (development convenience)
+- Gemini integration requires API key; if not provided, /analyze/ returns error
+
+9) Tests & Quality
+- Tests present: api/tests.py and dashboard/tests.py are placeholders with “Create your tests here”
+- Current test coverage is minimal
+- Logging: uses print statements; suggests migrating to Python logging
+
+10) Known Gaps & Recommendations
+- Add serializers for API models; expand tests; implement CI; add frontend templates and real charts
+- Improve security: move SECRET_KEY to environment; avoid committing db.sqlite3
+- Add input validation, rate limiting, and error handling
+- Consider decoupling labeling strategy from code; use labeled dataset or semi-supervised labeling
+- Add unit/integration tests for API endpoints
+
+11) How to Run Locally (Dev)
+- Prereqs: Python 3.11+, pip, virtualenv
+- Commands:
+  - python -m venv venv
+  - source venv/bin/activate (or on Windows: venv\\Scripts\\activate)
+  - pip install -r requirements.txt (if present) or install DRF, Django, scikit-learn, joblib, python-dotenv, google-generativeai
+  - python manage.py migrate
+  - python train_model.py (optional) to train and produce models
+  - python manage.py runserver 8000
+- Access: http://127.0.0.1:8000/api/ or /dashboard/
+
+12) Key Files (quick references)
+- manage.py: Django CLI
+- darkweb_app/settings.py: config (SQLite, DEBUG, installed apps)
+- api/models.py: PredictionLog
+- api/views.py: api_status, predict_threat, analyze_with_ai, get_stats
+- api/urls.py and dashboard/urls.py: route configuration
+- train_model.py: ML training pipeline
+- data/, models/, scripts/: data cleaning and ML artifacts
+- utils/llm_helper.py: LLM integration helper
+
+Appendix: Potential Next Steps
+- Propose creating a concise README with setup steps and usage examples
+- Add tests for endpoints and data flow
+- Add CI script and GitHub Actions workflow
+
+End of report
